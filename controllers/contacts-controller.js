@@ -1,5 +1,7 @@
 import Contact from "../models/Contact.js";
 
+
+
 import { HttpError } from "../helpers/index.js";
 import { ctrlWrapper } from "../decorators/index.js";
 
@@ -41,7 +43,9 @@ const getById = async (req, res) => {
 
 const add = async (req, res) => {
   const { id: owner } = req.user;
-  const result = await Contact.create({ ...req.body, owner });
+
+
+  const result = await Contact.create({ ...req.body,  owner });
   res.status(201).json(result);
 };
 
