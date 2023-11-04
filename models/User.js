@@ -3,6 +3,9 @@ import Joi from "joi";
 
 import { handleSaveError, runValidators } from "../hooks/hooks.js";
 
+const emailRegexp = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+const subscriptionList = ["starter", "pro", "business"];
+
 const userSchema = new Schema(
   {
     password: {
@@ -16,11 +19,19 @@ const userSchema = new Schema(
     },
     subscription: {
       type: String,
-      enum: ["starter", "pro", "business"],
+      enum: subscriptionList,
       default: "starter",
     },
     token: String,
     avatarURL: String,
+    verify: {
+      type: Boolean,
+      default: false,
+    },
+    verificationToken: {
+      type: String,
+      required: [true, "Verify token is required"],
+    },
   },
 
   { versionKey: false, timeseries: true }
@@ -40,6 +51,12 @@ export const userSingInSchema = Joi.object({
   password: Joi.string().required(),
   email: Joi.string().required(),
 });
+
+export const userEmailSchema = Joi.object({
+  email: Joi.string().pattern(emailRegexp).required(),
+});
+
+
 
 const User = model("user", userSchema);
 export default User;
